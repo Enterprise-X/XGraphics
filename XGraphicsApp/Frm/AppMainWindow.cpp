@@ -91,6 +91,7 @@ void AppMainWindow::initCtrl()
     m_Scene->setDisplayRect(0,0,4000,4000);
     m_Scene->getView()->centerOn(0,0);
     m_Scene->getView()->zoomToRect(QRectF(0,0,500,500));
+
     //m_Scene->config()->penMagneticLine.setBrush(QColor(0,0,0));
     //   m_Scene->config()->penMagneticLine.setWidth(2);
      //  m_Scene->config()->penMagneticLine.setStyle(Qt::DashDotDotLine);
@@ -133,87 +134,61 @@ void AppMainWindow::initXItemBtn()
 
 void AppMainWindow::initSceneSlots()
 {
+
+    connect(m_Scene,&XGraphicsScene::sceneContextMenuRequested,this,[&](const QPoint &pos)
+    {
+        QPointF sPt=m_Scene->getView()->mapToScene(pos);
+        auto item=m_Scene->getXItemByPos(pos);
+        auto link=m_Scene->getXLinkByPos(pos);
+        if(item)
+        {
+            QMenu menu;
+            auto action=menu.addAction(QString("Item设置文本"),this,[&]()
+            {
+                onXItemSetText(item);
+            }
+            );
+
+            action=menu.addAction(QString("切换图标"),this,[&]()
+            {
+                onXItemSwitchPix(item);
+            }
+            );
+
+            menu.exec(QCursor::pos());
+        }
+
+        if(link)
+        {
+            QMenu menu;
+            auto action=menu.addAction(QString("Link设置文本"),this,[&]()
+            {
+                onXLinkSetText(link);
+            }
+            );
+            menu.exec(QCursor::pos());
+        }
+
+
+    });
+
     ///双击设置
     connect(m_Scene,&XGraphicsScene::mouseDoubleClickXItem,this, [&](XGraphicsItem* item)
     {
         int nMDType=ui->cmbMDoubleSet->currentIndex();
         if(nMDType==0) //重命名
         {
-            QRectF rect=item->textRect();
-            if(rect.isValid()&&m_xTextEdit)
-            {
-                if(!item->item()) return;
-                auto sRect=item->item()->mapRectToScene(rect);
-                auto vTLPos=  m_Scene->getView()->mapFromScene(sRect.topLeft());
-                auto vBRPos=m_Scene->getView()->mapFromScene(sRect.bottomRight());
-                QRectF itemRect = QRectF(vTLPos, vBRPos);
-
-                m_xTextEdit->setXItem(item);
-                m_xTextEdit->setFixedSize(itemRect.width(), itemRect.height());
-                m_xTextEdit->setFont(item->itemConfig()->fontText);
-                m_xTextEdit->move(itemRect.topLeft().toPoint());
-                m_xTextEdit->setFocus();
-                m_xTextEdit->show();
-                m_xTextEdit->setText(item->text());
-                m_Scene->getView()->setZoomAble(false);
-            }
-
+           onXItemSetText(item);
         }
         else if(nMDType==1)//切换图标
         {
-            auto pixMaps=item->pixdata();
-            if(pixMaps.count()>0)
-            {
-                auto curKey=item->showPixKey();
-                auto iterator_1 = pixMaps.constBegin();
+            onXItemSwitchPix(item);
 
-                while (iterator_1 != pixMaps.constEnd())
-                {
-                    if(iterator_1.key()==curKey)
-                    {
-                         ++iterator_1;
-                        break;
-                    }
-                    ++iterator_1;
-                }
-                if( iterator_1!= pixMaps.constEnd())
-                {
-                    curKey=iterator_1.key();
-                }
-                else
-                {
-                     curKey=pixMaps.constBegin().key();
-                }
-                item->switchShowPixKey(curKey);
-            }
         }
 
     }
     );
-    connect(m_Scene,&XGraphicsScene::mouseDoubleClickXLink,this,[&](XGraphicsConnectLink* link)
-    {
-        if(link)
-        {
-            QRectF rect=link->textRect();
-            if(rect.isValid()&&m_xTextEdit)
-            {
-                auto sRect=link->mapRectToScene(rect);
-                auto vTLPos=  m_Scene->getView()->mapFromScene(sRect.topLeft());
-                auto vBRPos=m_Scene->getView()->mapFromScene(sRect.bottomRight());
-                QRectF itemRect = QRectF(vTLPos, vBRPos);
-
-                m_xTextEdit->setXLink(link);
-                m_xTextEdit->setFixedSize(itemRect.width(), itemRect.height());
-                m_xTextEdit->setFont(link->linkConfig()->fontText);
-                m_xTextEdit->move(itemRect.topLeft().toPoint());
-                m_xTextEdit->setFocus();
-                m_xTextEdit->show();
-                m_xTextEdit->setText(link->text());
-                m_Scene->getView()->setZoomAble(false);
-            }
-        }
-    }
-    );
+    connect(m_Scene,&XGraphicsScene::mouseDoubleClickXLink,this,&AppMainWindow::onXLinkSetText);
     ///连接前验证
     connect(m_Scene,&XGraphicsScene::judgeCantConnectXItem,this, [this](XGraphicsItem* fatherXItem,const QString &startKey,
             XGraphicsItem* sonXItem,const QString &sonKey)
@@ -309,6 +284,7 @@ void AppMainWindow::initSceneSlots()
     });
     connect(m_Scene,&XGraphicsScene::mouseClicked,this,[&](QGraphicsSceneMouseEvent* event)
      {
+
         if(event->button()==Qt::LeftButton)
         {
          foreach (auto link, m_Scene->getXLinks())
@@ -507,5 +483,81 @@ void AppMainWindow::on_btnSave_clicked()
     }
     saveScene(filePath,m_Scene);
 
+}
+
+void AppMainWindow::onXItemSetText(XGraphicsItem *item)
+{
+    QRectF rect=item->textRect();
+    if(rect.isValid()&&m_xTextEdit)
+    {
+        if(!item->item()) return;
+        auto sRect=item->item()->mapRectToScene(rect);
+        auto vTLPos=  m_Scene->getView()->mapFromScene(sRect.topLeft());
+        auto vBRPos=m_Scene->getView()->mapFromScene(sRect.bottomRight());
+        QRectF itemRect = QRectF(vTLPos, vBRPos);
+
+        m_xTextEdit->setXItem(item);
+        m_xTextEdit->setFixedSize(itemRect.width(), itemRect.height());
+        m_xTextEdit->setFont(item->itemConfig()->fontText);
+        m_xTextEdit->move(itemRect.topLeft().toPoint());
+        m_xTextEdit->setFocus();
+        m_xTextEdit->show();
+        m_xTextEdit->setText(item->text());
+        m_Scene->getView()->setZoomAble(false);
+    }
+
+}
+
+void AppMainWindow::onXItemSwitchPix(XGraphicsItem *item)
+{
+    auto pixMaps=item->pixdata();
+    if(pixMaps.count()>0)
+    {
+        auto curKey=item->showPixKey();
+        auto iterator_1 = pixMaps.constBegin();
+
+        while (iterator_1 != pixMaps.constEnd())
+        {
+            if(iterator_1.key()==curKey)
+            {
+                 ++iterator_1;
+                break;
+            }
+            ++iterator_1;
+        }
+        if( iterator_1!= pixMaps.constEnd())
+        {
+            curKey=iterator_1.key();
+        }
+        else
+        {
+             curKey=pixMaps.constBegin().key();
+        }
+        item->switchShowPixKey(curKey);
+    }
+}
+
+void AppMainWindow::onXLinkSetText(XGraphicsConnectLink *link)
+{
+    if(link)
+    {
+        QRectF rect=link->textRect();
+        if(rect.isValid()&&m_xTextEdit)
+        {
+            auto sRect=link->mapRectToScene(rect);
+            auto vTLPos=  m_Scene->getView()->mapFromScene(sRect.topLeft());
+            auto vBRPos=m_Scene->getView()->mapFromScene(sRect.bottomRight());
+            QRectF itemRect = QRectF(vTLPos, vBRPos);
+
+            m_xTextEdit->setXLink(link);
+            m_xTextEdit->setFixedSize(itemRect.width(), itemRect.height());
+            m_xTextEdit->setFont(link->linkConfig()->fontText);
+            m_xTextEdit->move(itemRect.topLeft().toPoint());
+            m_xTextEdit->setFocus();
+            m_xTextEdit->show();
+            m_xTextEdit->setText(link->text());
+            m_Scene->getView()->setZoomAble(false);
+        }
+    }
 }
 

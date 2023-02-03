@@ -39,32 +39,6 @@ void XGraphicsView::setZoomAble(bool able)
 
 /****************************内部工具接口****************************/
 
-void XGraphicsView::setMouseCursor(EXGraphicsCursor type)
-{
-    QCursor cursor;
-    if (type == EXGraphicsCursor::ArrowCursor)
-    {
-        cursor = QCursor(Qt::ArrowCursor);
-    }
-    else if (type == EXGraphicsCursor::DrawLinkCursor)
-    {
-        cursor = QCursor(Qt::CrossCursor);
-    }
-    else if (type == EXGraphicsCursor::SizeAllCurSor)
-    {
-        cursor = QCursor(Qt::SizeAllCursor);
-    }
-    else if (type == EXGraphicsCursor::OpenHandCursor)
-    {
-        cursor = QCursor(Qt::OpenHandCursor);
-    }
-    else if (type == EXGraphicsCursor::ClosedHandCursor)
-    {
-        cursor = QCursor(Qt::ClosedHandCursor);
-    }
-    viewport()->setCursor(cursor);
-}
-
 void XGraphicsView::zoomUp()
 {
     QTransform t = transform();
@@ -104,15 +78,15 @@ void XGraphicsView::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::RightButton)
     {
-        setDragMode(QGraphicsView::ScrollHandDrag);
-        setMouseCursor(EXGraphicsCursor::OpenHandCursor);
+        setDragMode(QGraphicsView::ScrollHandDrag);    
+        viewport()->setCursor(Qt::ArrowCursor);
         m_bRightPress = true;
         m_bLeftPress=false;
     }
     else
     {
         setDragMode(QGraphicsView::RubberBandDrag);
-        setMouseCursor(EXGraphicsCursor::ArrowCursor);
+        viewport()->setCursor(Qt::ArrowCursor);
         m_bRightPress = false;
         m_bLeftPress=true;
     }
@@ -122,13 +96,13 @@ void XGraphicsView::mousePressEvent(QMouseEvent *event)
 
 void XGraphicsView::mouseReleaseEvent(QMouseEvent *event)
 {
-
+    QGraphicsView::mouseReleaseEvent(event);
     QApplication::restoreOverrideCursor();
     m_bRightPress = false;
     m_bLeftPress=false;
-    m_bMoving=false;
+    m_bDraging=false;
     setDragMode(QGraphicsView::NoDrag);
-    QGraphicsView::mouseReleaseEvent(event);
+
 }
 
 void XGraphicsView::mouseMoveEvent(QMouseEvent *event)
@@ -136,7 +110,8 @@ void XGraphicsView::mouseMoveEvent(QMouseEvent *event)
     QApplication::restoreOverrideCursor();
     if (m_bRightPress)
     {
-        m_bMoving = true;
+        viewport()->setCursor(Qt::OpenHandCursor);
+        m_bDraging = true;
         QPointF disPointF = event->pos() - m_ptPressPos;
         m_ptPressPos = event->pos();
         QScrollBar *hBar = horizontalScrollBar();
@@ -170,6 +145,8 @@ void XGraphicsView::wheelEvent(QWheelEvent *event)
     }
 
 }
+
+
 
 void XGraphicsView::drawBackground(QPainter *painter, const QRectF &r)
 {

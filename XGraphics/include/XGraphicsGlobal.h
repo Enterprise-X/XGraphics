@@ -33,15 +33,6 @@ struct SConnectData
 
 };
 
-///XGraphics鼠标形状
-enum class  EXGraphicsCursor
-{
-    ArrowCursor = 0,
-    DrawLinkCursor,
-    SizeAllCurSor,
-    OpenHandCursor,
-    ClosedHandCursor,
-};
 
 #pragma endregion}
 

@@ -47,11 +47,17 @@ public:
     void zoomToRect(const QRectF &rect);
     ///设置缩放使能
     void setZoomAble(bool able);
-
+    ///是否缩放使能
     bool zoomAble() const
     {
         return m_bZoomAble;
     }
+    ///是否在拖动
+    bool draging() const
+    {
+        return m_bDraging;
+    }
+
     // QWidget interface
 protected:
 //*[视图事件]*
@@ -68,8 +74,6 @@ protected:
 
 protected:
 //*[内部工具接口]*
-    ///设置视图鼠标
-    void setMouseCursor(EXGraphicsCursor type);
     ///放大
     void zoomUp();
     ///缩小
@@ -77,8 +81,8 @@ protected:
 protected:
     ///缩放使能
     bool m_bZoomAble=true;
-    ///是否正在移动
-    bool  m_bMoving = false;
+    ///是否正在拖动
+    bool  m_bDraging = false;
     ///右键按下
     bool  m_bRightPress = false;
     ///左键按下
@@ -98,8 +102,6 @@ public:
 protected:
     ///视图配置
     SXGraphicsViewConfig m_config;
-
-
 
 };
 

@@ -421,6 +421,10 @@ void XGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     }
     else if (event->button() == Qt::RightButton)
     {
+        if(!getView()->draging())//非拖动情况下
+        {
+            emit sceneContextMenuRequested(pt.toPoint());
+        }
         m_bMouseRightPressed=false;
     }
     else
@@ -541,18 +545,22 @@ void XGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 void XGraphicsScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
     QGraphicsScene::mouseDoubleClickEvent(event);
-    auto pt=event->scenePos();
-    auto xItem=getXItemByPos(pt);
-    if(xItem)
+    if(event->button()==Qt::LeftButton)
     {
-        xItem->sceneMouseDoubleClickEvent(event);
-        emit mouseDoubleClickXItem(xItem);
+        auto pt=event->scenePos();
+        auto xItem=getXItemByPos(pt);
+        if(xItem)
+        {
+            xItem->sceneMouseDoubleClickEvent(event);
+            emit mouseDoubleClickXItem(xItem);
+        }
+        auto xLink=getXLinkByPos(pt);
+        if(xLink)
+        {
+            emit mouseDoubleClickXLink(xLink);
+        }
     }
-    auto xLink=getXLinkByPos(pt);
-    if(xLink)
-    {
-        emit mouseDoubleClickXLink(xLink);
-    }
+
 }
 
 //*[键盘]*

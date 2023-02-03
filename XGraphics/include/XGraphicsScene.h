@@ -101,6 +101,8 @@ signals:
 //*[scene信号]*
     ///鼠标点击事件
     void mouseClicked(QGraphicsSceneMouseEvent* evnet);
+    ///Scene右键菜单信号(view右键单击(非拖动)情况下)
+    void sceneContextMenuRequested(const QPoint &pos);
 //*[xItem信号]*
     ///xItem鼠标双击信号
     void mouseDoubleClickXItem(XGraphicsItem* xItem);

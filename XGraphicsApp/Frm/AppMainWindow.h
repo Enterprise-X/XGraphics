@@ -54,6 +54,13 @@ private slots:
 
     void on_btnSave_clicked();
 
+    ///修改item的text
+    void onXItemSetText(XGraphicsItem* item);
+    ///切换item图标
+    void onXItemSwitchPix(XGraphicsItem* item);
+    ///修改link的text
+    void onXLinkSetText(XGraphicsConnectLink* link);
+
 private:
     Ui::AppMainWindow *ui;
     AppXGraphicsItemFactory* m_itemFactory=nullptr;

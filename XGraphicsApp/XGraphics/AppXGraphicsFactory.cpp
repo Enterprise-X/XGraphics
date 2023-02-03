@@ -174,8 +174,7 @@ XGraphicsItem *AppXGraphicsItemFactory::getXGraphicsItem(const QString &type)
         XGraphicsEllipseItem *item=new XGraphicsEllipseItem("E2","",m_parScene);
         item->setText(QString("E2 %1").arg(nIdx));
         item->setTip(QString("Id:%1\r\n类型:%2").arg(item->itemId()).arg(item->itemType()));
-        item->setSize(150,100);
-
+        item->setSize(100,100);
         //图标设置
         QPen pen;
         pen.setBrush(Qt::NoBrush);
