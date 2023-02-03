@@ -22,11 +22,6 @@ struct SXRectItemConfig
         penSelectBoundingRect.setWidth(1);
         penSelectBoundingRect.setStyle(Qt::DashLine);
 
-
-        penHighlightRect.setColor(QColor(255,242,0));
-        penHighlightRect.setWidth(5);
-        brushHighlightRect=QBrush(QColor(Qt::white));
-
         rConnectRectSize=20;
     }
 
@@ -42,11 +37,6 @@ struct SXRectItemConfig
     QPen penSelectRect;
     ///选中时矩形笔刷
     QBrush brushSelectRect;
-
-    ///高亮时矩形画笔
-    QPen penHighlightRect;
-    ///高亮时矩形笔刷
-    QBrush brushHighlightRect;
 
     ///选中时边框画笔
     QPen penSelectBoundingRect;

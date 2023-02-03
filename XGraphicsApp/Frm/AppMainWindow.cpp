@@ -307,14 +307,25 @@ void AppMainWindow::initSceneSlots()
          auto fathers=xItem->getFatherConnectLinks();
          foreach (auto son,sons)
          {
+             auto linkCfg= son->linkConfig();
+             linkCfg->penHighLight.setColor(QColor(255,255,0));
+             auto itemCfg=son->sonXItem()->itemConfig();
+             itemCfg->penHighlight.setColor(QColor(255,255,0));
 
-             son->setHighlight(true);
-             son->sonXItem()->setHighlight(true);
+             son->setHighlight(true,false);
+             son->sonXItem()->setHighlight(true,false);
          }
          foreach (auto father,fathers)
          {
-             father->setHighlight(true);
-             father->fatherXItem()->setHighlight(true);
+             auto linkCfg= father->linkConfig();
+             linkCfg->penHighLight.setColor(QColor(255,128,64));
+             auto itemCfg=father->fatherXItem()->itemConfig();
+             itemCfg->penHighlight.setColor(QColor(255,128,64));
+
+
+
+             father->setHighlight(true,false);
+             father->fatherXItem()->setHighlight(true,false);
          }
 
          m_Scene->getView()->viewport()->update();

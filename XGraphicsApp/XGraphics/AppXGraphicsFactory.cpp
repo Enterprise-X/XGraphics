@@ -24,6 +24,7 @@ XGraphicsItem *AppXGraphicsItemFactory::getXGraphicsItem(const QString &type)
         auto lst=  m_parScene->getXItemsByType("A");
         int nIdx=lst.count()+1;
         XGraphicsRectItem *item=new XGraphicsRectItem("A","",m_parScene);
+
         item->setText(QString(" A %1").arg(nIdx));
         item->setTip(QString("Id:%1\r\n类型:%2").arg(item->itemId()).arg(item->itemType()));
 

@@ -214,8 +214,8 @@ void XGraphicsEllipseItem::paint(QPainter *painter, const QStyleOptionGraphicsIt
     }
     if(m_bHighlight)
     {
-        painter->setPen(m_config.penHighlightEllipse);
-        painter->setBrush(m_config.brushHighlightEllipse);
+        painter->setPen(m_ItemConfig.penHighlight);
+        painter->setBrush(m_ItemConfig.brushHighlight);
     }
     painter->drawEllipse(m_ptCenter,m_rRadiusX,m_rRadiusY);
 

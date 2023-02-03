@@ -21,6 +21,10 @@ struct SXCommonItemConfig
         penText.setWidth(1);
         fontText = QFont("YouYuan", 12, 2);
         fontText.setBold(true);
+
+        penHighlight.setColor(QColor(255,242,0));
+        penHighlight.setWidth(5);
+        brushHighlight=QBrush(QColor(Qt::white));
     }
 
     ///连接区域边框画笔
@@ -32,6 +36,12 @@ struct SXCommonItemConfig
     QPen penText;
     ///Item文本字体
     QFont fontText;
+
+    ///高亮时画笔
+    QPen penHighlight;
+    ///高亮时笔刷
+    QBrush brushHighlight;
+
 };
 ///XItem图像显示数据
 struct SXItemPixData

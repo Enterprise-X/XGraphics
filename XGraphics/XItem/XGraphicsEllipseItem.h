@@ -23,11 +23,6 @@ struct SXEllipseItemConfig
         penSelectBoundingEllipse.setWidth(1);
         penSelectBoundingEllipse.setStyle(Qt::DashLine);
 
-
-        penHighlightEllipse.setColor(QColor(255,242,0));
-        penHighlightEllipse.setWidth(5);
-        brushHighlightEllipse=QBrush(QColor(Qt::white));
-
         rConnectEllipseSize=10;
     }
 
@@ -41,11 +36,6 @@ struct SXEllipseItemConfig
     QPen penSelectEllipse;
     ///选中时矩形笔刷
     QBrush brushSelectEllipse;
-
-    ///高亮时矩形画笔
-    QPen penHighlightEllipse;
-    ///高亮时矩形笔刷
-    QBrush brushHighlightEllipse;
 
     ///选中时边框画笔
     QPen penSelectBoundingEllipse;

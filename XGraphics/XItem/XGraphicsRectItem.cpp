@@ -155,8 +155,8 @@ void XGraphicsRectItem::paint(QPainter *painter, const QStyleOptionGraphicsItem 
     }
     if(m_bHighlight)
     {
-        painter->setPen(m_config.penHighlightRect);
-        painter->setBrush(m_config.brushHighlightRect);
+        painter->setPen(m_ItemConfig.penHighlight);
+        painter->setBrush(m_ItemConfig.brushHighlight);
     }
     painter->drawRoundedRect(this->boundingRect(),m_config.rRoundedRect,m_config.rRoundedRect);
     painter->restore();
