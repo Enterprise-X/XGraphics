@@ -45,19 +45,8 @@ XGraphicsItem *AppXGraphicsItemFactory::getXGraphicsItem(const QString &type)
         item->switchShowPixKey("A");
         /*********/
 
-        //外观设置
-        auto cfg=item->config();
-        /*
-        cfg->penItemRect.setStyle(Qt::DashLine);
-        cfg->penItemRect.setColor(Qt::gray);
 
-        cfg->penSelectRect.setStyle(Qt::DashLine);
-        cfg->penSelectRect.setColor(QColor(247,105,0));
 
-        item->setWidth(200);
-        item->setHeight(60);
-        item->updateShape();*/
-        /*********/
 
         return item;
     }
@@ -77,23 +66,6 @@ XGraphicsItem *AppXGraphicsItemFactory::getXGraphicsItem(const QString &type)
         item->addPixData(new SXItemPixData("Smile", QPixmap(":/image/Image4.svg"),true,pen,brush));
         item->addPixData(new SXItemPixData("Cry", QPixmap(":/image/Image5.svg"),true,pen,brush));
         item->switchShowPixKey("Smile");
-        /*********/
-
-        //外观设置
-        /*auto cfg=item->config();
-        cfg->rRoundedRect=0;
-        cfg->penItemRect.setStyle(Qt::SolidLine);
-        cfg->penItemRect.setColor(Qt::yellow);
-
-        cfg->penSelectRect.setStyle(Qt::DashLine);
-        cfg->penSelectRect.setColor(QColor(247,105,0));
-
-        auto cfgCom=item->itemConfig();
-        cfgCom->fontText= QFont("Microsoft YaHei", 15, 2);
-
-        item->setWidth(300);
-        item->setHeight(100);
-        item->updateShape();*/
         /*********/
 
         return item;
@@ -144,15 +116,6 @@ XGraphicsItem *AppXGraphicsItemFactory::getXGraphicsItem(const QString &type)
 
         item->switchShowPixKey("A");
 
-        //外观设置
-     /*   auto cfg=item->config();
-        cfg->rRoundedRect=0;
-        cfg->brushItemRect=QColor(100,100,100);
-        cfg->brushSelectRect=QBrush(Qt::NoBrush);
-
-        auto cfgCom=item->itemConfig();
-        cfgCom->penText=QColor(Qt::white);*/
-        /*********/
 
         return item;
     }
@@ -214,8 +177,10 @@ XGraphicsConnectLink *AppXGraphicsLinkFactory::getXGraphicsLink()
 {
 
     XGraphicsConnectLink* link=new XGraphicsConnectLink();
-    auto cfg= link->linkConfig();
-    cfg->fontText.setPointSize(24);
+    auto font= link->textFont();
+    font.setPointSize(24);
+    link->setTextFont(font);
+
 
     return link;
 }

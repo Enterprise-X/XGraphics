@@ -61,6 +61,8 @@ private slots:
     ///修改link的text
     void onXLinkSetText(XGraphicsConnectLink* link);
 
+    void on_ckbShowGridSmall_stateChanged(int arg1);
+
 private:
     Ui::AppMainWindow *ui;
     AppXGraphicsItemFactory* m_itemFactory=nullptr;

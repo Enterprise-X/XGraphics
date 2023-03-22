@@ -16,32 +16,14 @@
 *
 */
 
-#pragma region Scene结构体{
-
-///场景风格
-struct SXGraphicsSceneConfig
-{
-    SXGraphicsSceneConfig()
-    {
-        penMagneticLine=QPen();
-        penMagneticLine.setBrush(QColor(Qt::white));
-        penMagneticLine.setStyle(Qt::DashLine);
-        penMagneticLine.setWidth(1);
-
-    }
-    ///磁吸线画笔
-    QPen penMagneticLine;
-
-};
-
-#pragma endregion}
 
 #pragma region Scene类{
-
+class XGraphicsScenePrivate;
 ///XScene场景类
 class XGRAPHICS_PUBLIC XGraphicsScene: public QGraphicsScene
 {
     Q_OBJECT
+    Q_PROPERTY(QPen magneticLinePen READ magneticLinePen WRITE setMagneticLinePen)
 public:
     XGraphicsScene(QObject *parent = nullptr);
     ~XGraphicsScene();
@@ -49,12 +31,6 @@ public:
 //*[常规公共接口]*
     ///获取View视图
     XGraphicsView* getView();
-    ///场景配置
-    SXGraphicsSceneConfig* config()
-    {
-        return &m_config;
-    }
-
     ///设置Item委托生产工厂
     void setXItemDelegateFactory(XGraphicsItemDelegateFactory* factory);
     ///设置Link委托生产工厂
@@ -67,6 +43,12 @@ public:
 
     ///缩放到Item范围
     void zoomToItemRect();
+public:
+ //*[属性接口]*
+    ///是否显示网格
+    QPen magneticLinePen() const;
+    ///设置显示网格
+    void setMagneticLinePen(const QPen &pen);
 
 //*[XItem字典]*
     ///添加Item
@@ -123,6 +105,8 @@ signals:
                                XGraphicsItem* xItemSon,const QString &sonKey);
     ///判断连接后的XLink是否正确 为true时则存在错误 取消连接
     bool judgeCantConnectXLink(XGraphicsConnectLink *xLink);
+    ///XLink连线成功事件
+    void xLinkConnectSuccess(XGraphicsConnectLink *xLink);
     ///xLink鼠标双击信号
     void mouseDoubleClickXLink(XGraphicsConnectLink* xLink);
     ///xLink添加信号
@@ -191,8 +175,6 @@ protected: //数据区域
     XGraphicsItemDelegateFactory *m_pXItemFactory=nullptr;
     ///Link委托工厂
     XGraphicsLinkDelegateFactory *m_pXLinkFactory=nullptr;
-    ///场景配置
-    SXGraphicsSceneConfig m_config;
     ///场景图元XItem字典
     QMap<QString,XGraphicsItem*> m_mapXItem;
     ///场景连线XLink字典
@@ -219,6 +201,11 @@ protected: //数据区域
     /// 水平磁吸线	垂直磁吸线
     QGraphicsLineItem *m_itemMagneticHLine=nullptr;
     QGraphicsLineItem *m_itemMagneticVLine=nullptr;
+
+protected:
+    const QScopedPointer<XGraphicsScenePrivate> d_ptr;
+private:
+     Q_DECLARE_PRIVATE(XGraphicsScene)
 
 };
 

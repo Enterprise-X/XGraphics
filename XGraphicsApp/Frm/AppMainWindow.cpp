@@ -116,9 +116,9 @@ void AppMainWindow::initCtrl()
     m_Scene->setXItemDelegateFactory((XGraphicsItemDelegateFactory*)m_itemFactory);
 #endif
 
-    ///界面设置控件初始化
-    auto config= m_Scene->getView()->config();
-    ui->ckbShowGrid->setChecked( config->bShowGrid);
+    ///界面设置控件初始化       
+    ui->ckbShowGrid->setChecked( m_Scene->getView()->showGridBig());
+    ui->ckbShowGridSmall->setChecked( m_Scene->getView()->showGridSmall());
 }
 
 void AppMainWindow::initXItemBtn()
@@ -134,7 +134,16 @@ void AppMainWindow::initXItemBtn()
 
 void AppMainWindow::initSceneSlots()
 {
+    connect(m_Scene,&XGraphicsScene::xLinkConnectSuccess,this,[&](XGraphicsConnectLink*  link)
+    {
+        if(link)
+        {
+            auto father=link->fatherXItem();
+            auto son=link->sonXItem();
+               addInfo(QString("连线成功:%1→%2").arg(father->text()).arg(son->text()));
+        }
 
+    });
     connect(m_Scene,&XGraphicsScene::sceneContextMenuRequested,this,[&](const QPoint &pos)
     {
         QPointF sPt=m_Scene->getView()->mapToScene(pos);
@@ -307,21 +316,27 @@ void AppMainWindow::initSceneSlots()
          auto fathers=xItem->getFatherConnectLinks();
          foreach (auto son,sons)
          {
-             auto linkCfg= son->linkConfig();
-             linkCfg->penHighLight.setColor(QColor(255,255,0));
-             auto itemCfg=son->sonXItem()->itemConfig();
-             itemCfg->penHighlight.setColor(QColor(255,255,0));
+             auto linkPen= son->highLightPen();
+             linkPen.setColor(QColor(255,255,0));
+             son->setHighLightPen(linkPen);
+
+
+             auto pen=son->sonXItem()->highlightPen();
+             pen.setColor(QColor(255,255,0));
+             son->sonXItem()->setHighlightPen(pen);
 
              son->setHighlight(true,false);
              son->sonXItem()->setHighlight(true,false);
          }
          foreach (auto father,fathers)
          {
-             auto linkCfg= father->linkConfig();
-             linkCfg->penHighLight.setColor(QColor(255,128,64));
-             auto itemCfg=father->fatherXItem()->itemConfig();
-             itemCfg->penHighlight.setColor(QColor(255,128,64));
+             auto linkPen= father->highLightPen();
+             linkPen.setColor(QColor(255,128,64));
+            father->setHighLightPen(linkPen);
 
+             auto pen=father->fatherXItem()->highlightPen();
+             pen.setColor(QColor(255,255,0));
+             father->fatherXItem()->setHighlightPen(pen);
 
 
              father->setHighlight(true,false);
@@ -412,13 +427,18 @@ void AppMainWindow::onXTextEditFocusOut()
 void AppMainWindow::on_ckbShowGrid_stateChanged(int arg1)
 {
     bool bShow= ui->ckbShowGrid->isChecked();
-    auto config= m_Scene->getView()->config();
-    config->bShowGrid=bShow;
+    m_Scene->getView()->setShowGridBig(bShow);
     m_Scene->update();
     m_Scene->getView()->update();
 }
 
-
+void AppMainWindow::on_ckbShowGridSmall_stateChanged(int arg1)
+{
+    bool bShow= ui->ckbShowGridSmall->isChecked();
+    m_Scene->getView()->setShowGridSmall(bShow);
+    m_Scene->update();
+    m_Scene->getView()->update();
+}
 void AppMainWindow::on_btnShowSon_clicked()
 {
     auto items=m_Scene->getSelectXItem();
@@ -509,7 +529,7 @@ void AppMainWindow::onXItemSetText(XGraphicsItem *item)
 
         m_xTextEdit->setXItem(item);
         m_xTextEdit->setFixedSize(itemRect.width(), itemRect.height());
-        m_xTextEdit->setFont(item->itemConfig()->fontText);
+        m_xTextEdit->setFont(item->textFont());
         m_xTextEdit->move(itemRect.topLeft().toPoint());
         m_xTextEdit->setFocus();
         m_xTextEdit->show();
@@ -562,7 +582,7 @@ void AppMainWindow::onXLinkSetText(XGraphicsConnectLink *link)
 
             m_xTextEdit->setXLink(link);
             m_xTextEdit->setFixedSize(itemRect.width(), itemRect.height());
-            m_xTextEdit->setFont(link->linkConfig()->fontText);
+            m_xTextEdit->setFont(link->textFont());
             m_xTextEdit->move(itemRect.topLeft().toPoint());
             m_xTextEdit->setFocus();
             m_xTextEdit->show();
@@ -571,4 +591,7 @@ void AppMainWindow::onXLinkSetText(XGraphicsConnectLink *link)
         }
     }
 }
+
+
+
 

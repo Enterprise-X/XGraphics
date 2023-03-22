@@ -4,9 +4,46 @@
 #include <QMouseEvent>
 #include <QScrollBar>
 
+/*******************************/
+//* [XGraphicsViewPrivate]
+/*******************************/
+class XGraphicsViewPrivate
+{
+    Q_DISABLE_COPY(XGraphicsViewPrivate)
+    Q_DECLARE_PUBLIC(XGraphicsView)
+
+public:
+    XGraphicsViewPrivate(XGraphicsView *q):q_ptr(q)
+    {
+        showGridBig=true;
+        showGridSmall=true;
+        backgroundColor=QColor(70,70,70);
+        gridSmallColor=QColor(95,95,95);
+        gridBigColor=QColor(30,30,30);
+        gridGap=20;
+    };
+    virtual ~XGraphicsViewPrivate(){};
+
+    XGraphicsView              *const q_ptr;
+
+    ///是否显示大网格
+    bool                       showGridBig;
+    ///是否显示小网格
+    bool                       showGridSmall;
+
+    ///背景颜色
+    QColor                     backgroundColor;
+    ///小型网格线颜色
+    QColor                     gridSmallColor;
+    ///大型网格线颜色
+    QColor                     gridBigColor;
+    ///网格间隔
+    uint                       gridGap;
+};
+
 /****************************构建与析构****************************/
 XGraphicsView::XGraphicsView(QGraphicsScene *parent)
-    : QGraphicsView(parent)
+    : QGraphicsView(parent),d_ptr(new XGraphicsViewPrivate(this))
 {
     setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
     setResizeAnchor(QGraphicsView::AnchorUnderMouse);
@@ -35,6 +72,78 @@ void XGraphicsView::zoomToRect(const QRectF &rect)
 void XGraphicsView::setZoomAble(bool able)
 {
     m_bZoomAble=able;
+}
+/****************************属性接口****************************/
+bool XGraphicsView::showGridBig() const
+{
+    Q_D(const XGraphicsView);
+    return d->showGridBig;
+}
+
+void XGraphicsView::setShowGridBig(const bool &show)
+{
+    Q_D(XGraphicsView);
+    d->showGridBig=show;
+}
+
+bool XGraphicsView::showGridSmall() const
+{
+    Q_D(const XGraphicsView);
+    return d->showGridSmall;
+}
+
+void XGraphicsView::setShowGridSmall(const bool &show)
+{
+    Q_D(XGraphicsView);
+    d->showGridSmall=show;
+}
+
+QColor XGraphicsView::backgroundColor() const
+{
+    Q_D(const XGraphicsView);
+    return d->backgroundColor;
+}
+
+void XGraphicsView::setBackgroundColor(const QColor &color)
+{
+    Q_D(XGraphicsView);
+    d->backgroundColor=color;
+}
+
+QColor XGraphicsView::gridSmallColor() const
+{
+    Q_D(const XGraphicsView);
+    return d->gridSmallColor;
+}
+
+void XGraphicsView::setGridSmallColor(const QColor &color)
+{
+    Q_D(XGraphicsView);
+    d->gridSmallColor=color;
+}
+
+QColor XGraphicsView::gridBigColor() const
+{
+    Q_D(const XGraphicsView);
+    return d->gridBigColor;
+}
+
+void XGraphicsView::setGridBigColor(const QColor &color)
+{
+    Q_D(XGraphicsView);
+    d->gridBigColor=color;
+}
+
+uint XGraphicsView::gridGap() const
+{
+    Q_D(const XGraphicsView);
+    return d->gridGap;
+}
+
+void XGraphicsView::setGridGap(const uint &gap)
+{
+    Q_D(XGraphicsView);
+    d->gridGap=gap;
 }
 
 /****************************内部工具接口****************************/
@@ -150,9 +259,10 @@ void XGraphicsView::wheelEvent(QWheelEvent *event)
 
 void XGraphicsView::drawBackground(QPainter *painter, const QRectF &r)
 {
-    setBackgroundBrush(m_config.colBackground);
+    Q_D(XGraphicsView);
+    setBackgroundBrush(d->backgroundColor);
     QGraphicsView::drawBackground(painter, r);
-    if(!m_config.bShowGrid) return;
+    if(!d->showGridBig&&!d->showGridSmall) return;
     auto drawGrid =
        [&](double gridStep)
        {
@@ -185,14 +295,18 @@ void XGraphicsView::drawBackground(QPainter *painter, const QRectF &r)
 
      QBrush bBrush = backgroundBrush();
 
-     QPen pSmall(m_config.colBgGridSmall, 0.5,Qt::DashLine);
-     painter->setPen(pSmall);
-     drawGrid(m_config.nGridGap);
-
-     QPen pBig(m_config.colBgGridBig, 0.8);
-
-     painter->setPen(pBig);
-     drawGrid(m_config.nGridGap*10);
+     if(d->showGridSmall)
+     {
+        QPen pSmall(d->gridSmallColor, 0.5,Qt::DashLine);
+        painter->setPen(pSmall);
+        drawGrid(d->gridGap);
+     }
+     if(d->showGridBig)
+     {
+        QPen pBig(d->gridBigColor, 0.8);
+        painter->setPen(pBig);
+        drawGrid(d->gridGap*10);
+     }
 
 }
 
