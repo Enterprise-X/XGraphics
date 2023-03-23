@@ -18,6 +18,10 @@ class XGRAPHICS_PUBLIC XGraphicsView: public QGraphicsView
     Q_PROPERTY(QColor gridSmallColor READ gridSmallColor WRITE setGridSmallColor)
     Q_PROPERTY(QColor gridBigColor READ gridBigColor WRITE setGridBigColor)
     Q_PROPERTY(uint gridGap READ gridGap WRITE setGridGap)
+
+    Q_PROPERTY(QColor magneticLineColor READ magneticLineColor WRITE setMagneticLineColor)
+    Q_PROPERTY(Qt::PenStyle magneticLinePenStyle READ magneticLinePenStyle WRITE setMagneticLinePenStyle)
+    Q_PROPERTY(int magneticLineWidth READ magneticLineWidth WRITE setMagneticLineWidth)
 public:
     XGraphicsView(QGraphicsScene *parent = nullptr);
     ~XGraphicsView();
@@ -69,6 +73,21 @@ public:
     ///设置网格间隔
     void setGridGap(const uint &gap);
 
+    //*[属性接口]*
+    ///磁吸线画笔
+    QColor magneticLineColor() const;
+    ///设置磁吸线画笔
+    void setMagneticLineColor(const QColor &color);
+
+    ///磁吸线画笔类型
+    Qt::PenStyle magneticLinePenStyle() const;
+    ///设置磁吸线画笔类型
+    void setMagneticLinePenStyle(const Qt::PenStyle &style);
+
+    ///磁吸线宽度
+    int magneticLineWidth() const;
+    ///设置磁吸线宽度
+    void setMagneticLineWidth(const int &width);
 
     // QWidget interface
 protected:

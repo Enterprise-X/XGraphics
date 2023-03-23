@@ -21,6 +21,10 @@ public:
         gridSmallColor=QColor(95,95,95);
         gridBigColor=QColor(30,30,30);
         gridGap=20;
+
+        magneticLineColor=QColor(Qt::white);
+        magneticLinePenStyle=Qt::DashLine;
+        magneticLineWidth=1;
     };
     virtual ~XGraphicsViewPrivate(){};
 
@@ -39,6 +43,13 @@ public:
     QColor                     gridBigColor;
     ///网格间隔
     uint                       gridGap;
+
+    ///磁吸线画笔
+    QColor                      magneticLineColor;
+    ///磁吸线画笔类型
+    Qt::PenStyle                magneticLinePenStyle;
+    ///磁吸线宽度
+    int                         magneticLineWidth;
 };
 
 /****************************构建与析构****************************/
@@ -55,6 +66,7 @@ XGraphicsView::XGraphicsView(QGraphicsScene *parent)
     setMouseTracking(true);
     setCacheMode(QGraphicsView::CacheBackground);
     setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
+    setBackgroundBrush(d_ptr->backgroundColor);
 }
 
 XGraphicsView::~XGraphicsView()
@@ -108,6 +120,7 @@ void XGraphicsView::setBackgroundColor(const QColor &color)
 {
     Q_D(XGraphicsView);
     d->backgroundColor=color;
+    setBackgroundBrush(d->backgroundColor);
 }
 
 QColor XGraphicsView::gridSmallColor() const
@@ -144,6 +157,43 @@ void XGraphicsView::setGridGap(const uint &gap)
 {
     Q_D(XGraphicsView);
     d->gridGap=gap;
+}
+
+
+QColor XGraphicsView::magneticLineColor() const
+{
+    Q_D(const XGraphicsView);
+    return d->magneticLineColor;
+}
+
+void XGraphicsView::setMagneticLineColor(const QColor &color)
+{
+    Q_D(XGraphicsView);
+    d->magneticLineColor=color;
+}
+
+Qt::PenStyle XGraphicsView::magneticLinePenStyle() const
+{
+    Q_D(const XGraphicsView);
+    return d->magneticLinePenStyle;
+}
+
+void XGraphicsView::setMagneticLinePenStyle(const Qt::PenStyle &style)
+{
+    Q_D(XGraphicsView);
+    d->magneticLinePenStyle=style;
+}
+
+int XGraphicsView::magneticLineWidth() const
+{
+    Q_D(const XGraphicsView);
+    return d->magneticLineWidth;
+}
+
+void XGraphicsView::setMagneticLineWidth(const int &width)
+{
+    Q_D(XGraphicsView);
+    d->magneticLineWidth=width;
 }
 
 /****************************内部工具接口****************************/
@@ -260,7 +310,6 @@ void XGraphicsView::wheelEvent(QWheelEvent *event)
 void XGraphicsView::drawBackground(QPainter *painter, const QRectF &r)
 {
     Q_D(XGraphicsView);
-    setBackgroundBrush(d->backgroundColor);
     QGraphicsView::drawBackground(painter, r);
     if(!d->showGridBig&&!d->showGridSmall) return;
     auto drawGrid =
@@ -309,5 +358,6 @@ void XGraphicsView::drawBackground(QPainter *painter, const QRectF &r)
      }
 
 }
+
 
 

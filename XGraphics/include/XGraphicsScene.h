@@ -23,12 +23,22 @@ class XGraphicsScenePrivate;
 class XGRAPHICS_PUBLIC XGraphicsScene: public QGraphicsScene
 {
     Q_OBJECT
-    Q_PROPERTY(QPen magneticLinePen READ magneticLinePen WRITE setMagneticLinePen)
+
 public:
     XGraphicsScene(QObject *parent = nullptr);
     ~XGraphicsScene();
 public:
 //*[常规公共接口]*
+    ///场景Tag
+    QVariant sceneTag() const
+    {
+        return m_SceneTag;
+    }
+    ///设置场景Tag
+    void setSceneTag(const QVariant& tag)
+    {
+        m_SceneTag=tag;
+    }
     ///获取View视图
     XGraphicsView* getView();
     ///设置Item委托生产工厂
@@ -44,11 +54,6 @@ public:
     ///缩放到Item范围
     void zoomToItemRect();
 public:
- //*[属性接口]*
-    ///是否显示网格
-    QPen magneticLinePen() const;
-    ///设置显示网格
-    void setMagneticLinePen(const QPen &pen);
 
 //*[XItem字典]*
     ///添加Item
@@ -168,6 +173,9 @@ protected:
 
 
 protected: //数据区域
+//*[场景属性]*
+    ///场景Tag
+    QVariant m_SceneTag;
 //*[场景数据]*
     ///view视图类
     XGraphicsView *m_pView=nullptr;
