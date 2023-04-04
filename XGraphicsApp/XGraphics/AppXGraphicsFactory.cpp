@@ -5,8 +5,8 @@
 #include "XGraphicsScene.h"
 #include <QStyle>
 #include <QApplication>
-AppXGraphicsItemFactory::AppXGraphicsItemFactory(QObject *parent)
-    :XGraphicsItemDelegateFactory{parent}
+AppXGraphicsItemFactory::AppXGraphicsItemFactory(XGraphicsScene* scene,QObject *parent)
+    :XGraphicsItemDelegateFactory{scene,parent}
 {
 
 }
@@ -29,20 +29,7 @@ XGraphicsItem *AppXGraphicsItemFactory::getXGraphicsItem(const QString &type)
         item->setTip(QString("Id:%1\r\n类型:%2").arg(item->itemId()).arg(item->itemType()));
 
         //图标设置
-        QPen pen;
-        pen.setBrush(Qt::NoBrush);
-        QBrush brush=(Qt::NoBrush);
 
-        QPixmap pix= QPixmap(":/image/Image1.svg");
-        item->addPixData(new SXItemPixData("A",pix,true,pen,brush));
-
-        brush=QBrush(Qt::red);
-        item->addPixData(new SXItemPixData("B",pix,true,pen,brush));
-
-        brush=QBrush(Qt::green);
-        item->addPixData(new SXItemPixData("C",pix,true,pen,brush));
-
-        item->switchShowPixKey("A");
         /*********/
 
 
@@ -60,12 +47,7 @@ XGraphicsItem *AppXGraphicsItemFactory::getXGraphicsItem(const QString &type)
         item->setTip(QString("Id:%1\r\n类型:%2").arg(item->itemId()).arg(item->itemType()));
 
         //图标设置
-        QPen pen;
-        pen.setBrush(Qt::NoBrush);
-        QBrush brush=(Qt::NoBrush);
-        item->addPixData(new SXItemPixData("Smile", QPixmap(":/image/Image4.svg"),true,pen,brush));
-        item->addPixData(new SXItemPixData("Cry", QPixmap(":/image/Image5.svg"),true,pen,brush));
-        item->switchShowPixKey("Smile");
+
         /*********/
 
         return item;
@@ -97,25 +79,6 @@ XGraphicsItem *AppXGraphicsItemFactory::getXGraphicsItem(const QString &type)
         item->setText(QString("OnlyD"));
         item->setTip(QString("Id:%1\r\n类型:%2").arg(item->itemId()).arg(item->itemType()));
 
-        //图标设置
-        QPen pen;
-        pen.setBrush(Qt::NoBrush);
-        QBrush brush=(Qt::NoBrush);
-        item->addPixData(new SXItemPixData("A", QPixmap(":/image/Image1.svg"),true,pen,brush));
-
-        brush=QBrush(Qt::red);
-        item->addPixData(new SXItemPixData("B", QPixmap(":/image/Image2.svg"),true,pen,brush));
-
-        brush=QBrush(Qt::green);
-        item->addPixData(new SXItemPixData("C", QPixmap(":/image/Image3.svg"),true,pen,brush));
-
-        brush=QBrush(Qt::NoBrush);
-        item->addPixData(new SXItemPixData("D", QPixmap(":/image/Image4.svg"),true,pen,brush));
-
-        item->addPixData(new SXItemPixData("E", QPixmap(":/image/Image5.svg"),true,pen,brush));
-
-        item->switchShowPixKey("A");
-
 
         return item;
     }
@@ -140,23 +103,6 @@ XGraphicsItem *AppXGraphicsItemFactory::getXGraphicsItem(const QString &type)
         item->setTip(QString("Id:%1\r\n类型:%2").arg(item->itemId()).arg(item->itemType()));
         item->setSize(100,100);
         //图标设置
-        QPen pen;
-        pen.setBrush(Qt::NoBrush);
-        QBrush brush=(Qt::NoBrush);
-        item->addPixData(new SXItemPixData("A", QPixmap(":/image/Image1.svg"),true,pen,brush));
-
-        brush=QBrush(Qt::red);
-        item->addPixData(new SXItemPixData("B", QPixmap(":/image/Image2.svg"),true,pen,brush));
-
-        brush=QBrush(Qt::green);
-        item->addPixData(new SXItemPixData("C", QPixmap(":/image/Image3.svg"),true,pen,brush));
-
-        brush=QBrush(Qt::NoBrush);
-        item->addPixData(new SXItemPixData("D", QPixmap(":/image/Image4.svg"),true,pen,brush));
-
-        item->addPixData(new SXItemPixData("E", QPixmap(":/image/Image5.svg"),true,pen,brush));
-
-        item->switchShowPixKey("A");
 
         return item;
     }
@@ -167,8 +113,8 @@ XGraphicsItem *AppXGraphicsItemFactory::getXGraphicsItem(const QString &type)
     return nullptr;
 }
 
-AppXGraphicsLinkFactory::AppXGraphicsLinkFactory(QObject *parent)
-  :XGraphicsLinkDelegateFactory{parent}
+AppXGraphicsLinkFactory::AppXGraphicsLinkFactory(XGraphicsScene* scene,QObject *parent)
+  :XGraphicsLinkDelegateFactory{scene,parent}
 {
 
 }

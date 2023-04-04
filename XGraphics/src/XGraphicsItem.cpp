@@ -478,11 +478,13 @@ void XGraphicsItem::addPixData(SXItemPixData *data)
     }
 }
 
-bool XGraphicsItem::switchShowPixKey(const QString &key, bool bUpdate)
+bool XGraphicsItem::switchShowPixKey(const QString &pixKey,const QString &penKey, bool bUpdate)
 {
-    if(m_mapPixData.contains(key)||key=="")
+    if(m_mapPixData.contains(pixKey)||pixKey=="")
     {
-        m_strShowPixKey=key;
+        m_strShowPixKey=pixKey;
+        auto pixData=m_mapPixData[pixKey];
+        pixData->switchPenKey(penKey);
         if(bUpdate)
         {
             auto it=item();

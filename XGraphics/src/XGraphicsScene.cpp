@@ -3,7 +3,10 @@
 #include <QGraphicsSceneEvent>
 #include <QKeyEvent>
 
+#include "XGraphicsView.h"
+#include "XGraphicsDelegateFactory.h"
 #include "XGraphicsItem.h"
+#include "XGraphicsConnectLink.h"
 #include "XGraphicsMimeData.h"
 #include "XGraphicsUtils.h"
 

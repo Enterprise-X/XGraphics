@@ -83,14 +83,16 @@ void AppMainWindow::initFrm()
     initSceneSlots();
 }
 
+#define Scene_Display_Size 4000
+
 void AppMainWindow::initCtrl()
 {
     ///Scene初始化
     m_Scene = new XGraphicsScene();
     m_Scene->setObjectName("XScene");
-    m_Scene->setDisplayRect(0,0,4000,4000);
+    m_Scene->setDisplayRect(0,0,Scene_Display_Size,Scene_Display_Size);
     m_Scene->getView()->centerOn(0,0);
-    m_Scene->getView()->zoomToRect(QRectF(0,0,500,500));
+    m_Scene->getView()->zoomToRect(QRectF(0,0,Scene_Display_Size/4,Scene_Display_Size/4));
 
     //m_Scene->config()->penMagneticLine.setBrush(QColor(0,0,0));
     //   m_Scene->config()->penMagneticLine.setWidth(2);
@@ -475,7 +477,7 @@ void AppMainWindow::on_btnHideICon_clicked()
         auto item=dynamic_cast<XGraphicsItem*>(items[0]);
         if(item)
         {
-           item->switchShowPixKey("");
+           item->switchShowPixKey("","");
         }
     }
 }
@@ -564,7 +566,7 @@ void AppMainWindow::onXItemSwitchPix(XGraphicsItem *item)
         {
              curKey=pixMaps.constBegin().key();
         }
-        item->switchShowPixKey(curKey);
+        item->switchShowPixKey(curKey,"");
     }
 }
 

@@ -12,7 +12,7 @@ class AppXGraphicsItemFactory: public XGraphicsItemDelegateFactory
 {
     Q_OBJECT
 public:
-    AppXGraphicsItemFactory(QObject* parent=nullptr);
+    AppXGraphicsItemFactory(XGraphicsScene* scene,QObject* parent=nullptr);
 
     // XNodeItemDelegateFactory interface
 public:
@@ -25,7 +25,7 @@ class AppXGraphicsLinkFactory:public XGraphicsLinkDelegateFactory
 {
     Q_OBJECT
 public:
-    AppXGraphicsLinkFactory(QObject* parent=nullptr);
+    AppXGraphicsLinkFactory(XGraphicsScene* scene,QObject* parent=nullptr);
 
     // XGraphicsLinkDelegateFactory interface
 public:

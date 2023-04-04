@@ -2,10 +2,6 @@
 #define XGRAPHICSSCENE_H
 
 #include <QGraphicsScene>
-#include "XGraphicsView.h"
-#include "XGraphicsDelegateFactory.h"
-#include "XGraphicsItem.h"
-#include "XGraphicsConnectLink.h"
 #include "XGraphicsGlobal.h"
 
 /*
@@ -18,6 +14,11 @@
 
 
 #pragma region Scene类{
+class XGraphicsView;
+class XGraphicsItemDelegateFactory;
+class XGraphicsLinkDelegateFactory;
+class XGraphicsItem;
+class XGraphicsConnectLink;
 class XGraphicsScenePrivate;
 ///XScene场景类
 class XGRAPHICS_PUBLIC XGraphicsScene: public QGraphicsScene

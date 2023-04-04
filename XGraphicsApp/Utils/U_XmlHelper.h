@@ -5,7 +5,9 @@
 #include <QVariant>
 #include "XGraphicsScene.h"
 #include "AppXGraphicsFactory.h"
-
+#include "XGraphicsView.h"
+#include "XGraphicsEllipseItem.h"
+#include "XGraphicsRectItem.h"
 #pragma region 工具函数{
 
 /*================保存操作================*/
@@ -177,9 +179,9 @@ inline static bool loadScene(QString path,XGraphicsScene *scene)
     QMap<QString,XGraphicsItem*> mapXItems;
     QList<XGraphicsConnectLink*> lstXLinks;
 
-    AppXGraphicsItemFactory* xItemfactory=new AppXGraphicsItemFactory();
+    AppXGraphicsItemFactory* xItemfactory=new AppXGraphicsItemFactory(scene);
     xItemfactory->setScene(scene);
-    AppXGraphicsLinkFactory* xLinkfactory=new AppXGraphicsLinkFactory();
+    AppXGraphicsLinkFactory* xLinkfactory=new AppXGraphicsLinkFactory(scene);
     xLinkfactory->setScene(scene);
     int nCount=eleXItems.childNodes().count();
     for (int i = 0; i < nCount; ++i)
@@ -199,7 +201,7 @@ inline static bool loadScene(QString path,XGraphicsScene *scene)
         xItem->setItemId(id);
         xItem->setText(text);
         xItem->setTip(QString("Id:%1\r\n类型:%2").arg(xItem->itemId()).arg(xItem->itemType()));
-        xItem->switchShowPixKey(pixKey);
+        xItem->switchShowPixKey(pixKey,"");
         auto item=xItem->item();
         if(item)
         {

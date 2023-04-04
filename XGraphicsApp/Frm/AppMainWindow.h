@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "XGraphicsScene.h"
+#include "XGraphicsView.h"
 #include "XGraphicsTextEdit.h"
 #include "AppXGraphicsFactory.h"
 
